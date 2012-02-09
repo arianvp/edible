@@ -6,7 +6,20 @@ zappa ->
 	@use 'static'
 
 	@get '/': -> @render 'index'
+
 	@get '/posts' : ->
+		# We have to make sure we're dealing with numbers that are positive.
+		defaultLimit = 2
+		defaultOffset = 0
+		limit = parseInt(@query.limit ? "#{defaultLimit}")
+		offset = parseInt(@query.offset ? "#{defaultOffset}")
+		if isNaN(limit) or isNaN(offset)
+			limit = defaultLimit
+			offset = defaultOffset
+			
+		limit = defaultLimit unless limit > 0
+		offset = defaultOffset unless offset >= 0
+
 	@get '/posts:id' : ->
 		await postsModel.findById @params.id,
 		defer err, post
@@ -33,4 +46,3 @@ zappa ->
 				title: post.title
 				previousPost: previousPosts[0]
 				nextPost: nextPosts[0]
-				
