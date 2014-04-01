@@ -41,8 +41,7 @@ zappa ->
 				.limit(1)
 				.toArray defer err, nextPosts
 
-			@render post:
-				post: postsModel
+			@render post: postsModel
 				title: post.title
 				previousPost: previousPosts[0]
 				nextPost: nextPosts[0]
